@@ -1,5 +1,5 @@
 import './Global.css';
-import Header from '../componants/header/header.js';
+import Header from '../componants/header/headerAccount.js';
 import AccountSection from '../componants/accountSection/accountSection.js';
 import Footer from '../componants/footer/footer.js'
 

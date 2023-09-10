@@ -5,11 +5,30 @@ import Home from './pages/Home';
 import SignIn from './pages/SignIn';
 import Account from './pages/Account';
 import reportWebVitals from './reportWebVitals';
+import {
+  createBrowserRouter,
+  RouterProvider,
+} from "react-router-dom";
+
+const router = createBrowserRouter([
+  {
+    path: "/",
+    element: <Home />,
+  },
+  {
+    path: "/sign-in",
+    element: <SignIn />,
+  },
+  {
+    path: "/account",
+    element: <Account />,
+  },
+]);
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
-    <SignIn />
+    <RouterProvider router={router} />
   </React.StrictMode>
 );
 
