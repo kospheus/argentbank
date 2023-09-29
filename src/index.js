@@ -5,6 +5,8 @@ import Home from './pages/Home';
 import SignIn from './pages/SignIn';
 import Account from './pages/Account';
 import reportWebVitals from './reportWebVitals';
+import store from './redux/store';
+import { Provider } from 'react-redux';
 import {
   createBrowserRouter,
   RouterProvider,
@@ -28,7 +30,10 @@ const router = createBrowserRouter([
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
-    <RouterProvider router={router} />
+    <Provider store={store}>
+      <RouterProvider router={router} />
+    </Provider>
+    
   </React.StrictMode>
 );
 

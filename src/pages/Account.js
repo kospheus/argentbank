@@ -1,10 +1,21 @@
 import './Global.css';
 import Header from '../componants/header/headerAccount.js';
 import AccountSection from '../componants/accountSection/accountSection.js';
-import Footer from '../componants/footer/footer.js'
+import Footer from '../componants/footer/footer.js';
+import { login } from '../redux/auth/authActions.js';
+import authReducer from '../redux/auth/authReducer.js';
+import store from "../redux/store";
 
 
 function Account() {
+
+    const user = localStorage.getItem('user');
+    if (!user) {
+        document.location.href = '/sign-in';
+    }
+    authReducer(null, login(JSON.parse(user).userName, JSON.parse(user).token));
+    store.dispatch(login(JSON.parse(user).userName, JSON.parse(user).token));
+
   return (
     <>
         <Header />
