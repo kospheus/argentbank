@@ -2,8 +2,8 @@ import './Global.css';
 import Header from '../componants/header/headerAccount.js';
 import AccountSection from '../componants/accountSection/accountSection.js';
 import Footer from '../componants/footer/footer.js';
-import { login } from '../redux/auth/authActions.js';
-import authReducer from '../redux/auth/authReducer.js';
+import { login } from '../redux/actions/signin.action';
+import authReducer from '../redux/reducers/signin.reducer';
 import store from "../redux/store";
 
 
@@ -19,12 +19,12 @@ function Account() {
   return (
     <>
         <Header />
-        <main class="main bg-dark">
-            <div class="header">
+        <main className="main bg-dark">
+            <div className="header">
                 <h1>Welcome back<br />Tony Jarvis!</h1>
-                <button class="edit-button">Edit Name</button>
+                <button className="edit-button">Edit Name</button>
             </div>
-            <h2 class="sr-only">Accounts</h2>
+            <h2 className="sr-only">Accounts</h2>
             <AccountSection
                 title="Argent Bank Checking (x8349)"
                 amount="$2,082.79"
