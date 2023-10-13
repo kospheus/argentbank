@@ -4,9 +4,7 @@ export const login = (username, token) => ({
     payload: { username, token },
 });
   
-export const logout = () => ({
-    type: 'LOGOUT',
-});
+
   
 export const changeUserName = (userName) => ({
     type: 'CHANGE_USERNAME',

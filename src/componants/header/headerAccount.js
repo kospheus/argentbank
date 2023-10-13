@@ -1,8 +1,18 @@
 import React from 'react';
 import './header.css';
 import Logo from '../../assets/argentBankLogo.png';
+import { connect } from 'react-redux';
+import { logout } from '../../redux/out/outActions';
+import { useNavigate } from 'react-router-dom'; // Importez useNavigate depuis react-router-dom
 
-function Header() {
+function Header({ isAuthenticated, logout }) {
+  const navigate = useNavigate(); // Obtenez la fonction de navigation
+
+  const handleLogout = () => {
+    logout();
+    navigate('/'); // Rediriger vers la page d'accueil après la déconnexion
+  };
+
   return (
     <nav className="main-nav">
       <a className="main-nav-logo" href="/">
@@ -14,17 +24,28 @@ function Header() {
         <h1 className="sr-only">Argent Bank</h1>
       </a>
       <div>
-        <a className="main-nav-item" href="/sign-in">
-          <i className="fa fa-user-circle"></i>
-          Sign In
-        </a>
-        <a class="main-nav-item" href="./index.html">
-          <i class="fa fa-sign-out"></i>
-          Sign Out
-        </a>
+        {isAuthenticated ? (
+          <a className="main-nav-item" href="#" onClick={handleLogout}>
+            <i className="fa fa-sign-out"></i>
+            Sign Out
+          </a>
+        ) : (
+          <a className="main-nav-item" href="/sign-in">
+            <i className="fa fa-user-circle"></i>
+            Sign In
+          </a>
+        )}
       </div>
     </nav>
   );
 }
 
-export default Header;
+const mapStateToProps = (state) => ({
+  isAuthenticated: state.auth.isAuthenticated,
+});
+
+const mapDispatchToProps = {
+  logout,
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(Header);

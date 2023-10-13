@@ -34,3 +34,39 @@ body {
   font-weight: bold;
   padding: 10px;
 }
+
+.modal-container {
+  margin-top: 12px;
+  display: flex;
+  justify-content: center;
+}
+
+.modal {
+  width: 300px;
+  background-color: white;
+  border-radius: 8px;
+}
+
+.modal-text {
+  color: #12002b;
+}
+
+.modal-buttons {
+  margin: 16px 0;
+}
+
+.modal-button1 {
+  border-color: #00bc77;
+  background-color: #00bc77;
+  color: #fff;
+  font-weight: bold;
+  padding: 10px;
+}
+.modal-button2 {
+  border-color: #00bc77;
+  background-color: #00bc77;
+  color: #fff;
+  font-weight: bold;
+  padding: 10px;
+  margin-left: 8px;
+}

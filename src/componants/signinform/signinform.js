@@ -25,7 +25,6 @@ function SignInForm() {
       method: 'POST', // Méthode HTTP (POST pour une requête POST)
       headers: {
         'Content-Type': 'application/json', // Type de contenu de la requête (dans ce cas, JSON)
-        // Ajoutez d'autres en-têtes si nécessaire
       },
       body: JSON.stringify(dataToSend), // Convertit les données en JSON
     };
@@ -50,8 +49,6 @@ function SignInForm() {
         console.error('Erreur lors de la requête Fetch :', error);
       });    
   };
-
-
 
 
   return (
