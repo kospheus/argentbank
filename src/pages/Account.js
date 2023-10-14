@@ -7,7 +7,8 @@ import { login } from '../redux/auth/authActions.js';
 import authReducer from '../redux/auth/authReducer.js';
 import store from "../redux/store";
 import {EditNameModal} from '../componants/editNameModal/editNameModal'; // Importez le composant EditNameModal
-import {useSelector} from 'react-redux';
+import {useSelector, connect} from 'react-redux';
+import {fetchAction} from '../redux/fetchAction.js';
 
 
 function Account() {
@@ -41,42 +42,8 @@ function Account() {
         // Réinitialisez le nouveau nom à sa valeur précédente
         setNewUsername(JSON.parse(user).userName);
     };
-
-    //requete fetch
-    const handleName = () => {
-
-    // L'URL de l'API que vous souhaitez appeler
-    const apiUrl = 'http://localhost:3001/api/v1/user/profile';
-
-    // Options de la requête POST
-    const requestOptions = {
-      method: 'POST', // Méthode HTTP (POST pour une requête POST)
-      headers: {
-        'Content-Type': 'application/json', // Type de contenu de la requête (dans ce cas, JSON)
-        'Authorization': 'Bearer ' + (userRedux && userRedux.token), 
-      },
-    };
-
-    // Effectuer la requête Fetch
-    fetch(apiUrl, requestOptions)
-      .then(response => {
-        if (!response.ok) {
-          throw new Error('La requête a échoué avec le code : ' + response.status);
-        }
-        return response.json(); // Analyse la réponse JSON
-      })
-      .then(data => {
-        // Traitez les données renvoyées par l'API
-        console.log('Réponse de l\'API :', data);
-        // const user = { userName: username, token: data.body.token };
-      })
-      .catch(error => {
-        // Gérez les erreurs ici
-        console.error('Erreur lors de la requête Fetch :', error);
-      });    
-  };
-
-    userRedux && handleName();
+    
+    userRedux && fetchAction();
 
     return (
         <>
@@ -122,4 +89,6 @@ function Account() {
     );
 }
 
-export default Account;
+
+
+export default connect(mapStateToProps, mapDispatchToProps)(Account);

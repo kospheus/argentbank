@@ -1,9 +1,11 @@
 import React, { useState } from 'react';
 import './signinform.css';
-import { connect } from 'react-redux';
+import { connect, useDispatch } from 'react-redux';
 import { login } from '../../redux/auth/authActions.js';
+import {fetchAction} from '../../redux/fetchAction.js';
 
 function SignInForm() {
+  const dispatch = useDispatch();
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const isAuthenticated = false;
@@ -17,37 +19,8 @@ function SignInForm() {
       // ... autres données
     };
 
-    // L'URL de l'API que vous souhaitez appeler
-    const apiUrl = 'http://localhost:3001/api/v1/user/login';
-
-    // Options de la requête POST
-    const requestOptions = {
-      method: 'POST', // Méthode HTTP (POST pour une requête POST)
-      headers: {
-        'Content-Type': 'application/json', // Type de contenu de la requête (dans ce cas, JSON)
-      },
-      body: JSON.stringify(dataToSend), // Convertit les données en JSON
-    };
-
-    // Effectuer la requête Fetch
-    fetch(apiUrl, requestOptions)
-      .then(response => {
-        if (!response.ok) {
-          throw new Error('La requête a échoué avec le code : ' + response.status);
-        }
-        return response.json(); // Analyse la réponse JSON
-      })
-      .then(data => {
-        // Traitez les données renvoyées par l'API
-        console.log('Réponse de l\'API :', data);
-        const user = { userName: username, token: data.body.token };
-        localStorage.setItem('user', JSON.stringify(user));
-        document.location.href = '/account';
-      })
-      .catch(error => {
-        // Gérez les erreurs ici
-        console.error('Erreur lors de la requête Fetch :', error);
-      });    
+    dispatch(login(dataToSend));
+    document.location.href = "/account";
   };
 
 
@@ -97,6 +70,7 @@ const mapStateToProps = (state) => ({
 });
 
 const mapDispatchToProps = {
+  fetchAction,
   login,
 };
 
