@@ -41,7 +41,7 @@ function Header({ isAuthenticated, logout }) {
 }
 
 const mapStateToProps = (state) => ({
-  isAuthenticated: state.auth.isAuthenticated,
+  isAuthenticated: state.auth?.isAuthenticated,
 });
 
 const mapDispatchToProps = {
