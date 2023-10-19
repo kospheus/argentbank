@@ -1,25 +1,56 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './Global.css';
 import Header from '../componants/header/headerAccount.js';
 import AccountSection from '../componants/accountSection/accountSection.js';
 import Footer from '../componants/footer/footer.js';
 import { login } from '../redux/auth/authActions.js';
 import authReducer from '../redux/auth/authReducer.js';
-import store from "../redux/store";
+import {setName} from '../redux/name/nameActions.js';
 import {EditNameModal} from '../componants/editNameModal/editNameModal'; // Importez le composant EditNameModal
-import {useSelector} from 'react-redux';
+import {useSelector, useDispatch} from 'react-redux';
 
 
 function Account() {
     const user = localStorage.getItem('user');
-    if (!user) {
-        document.location.href = '/sign-in';
-    }
-    authReducer(null, login(JSON.parse(user).userName, JSON.parse(user).token));
-    store.dispatch(login(JSON.parse(user).userName, JSON.parse(user).token));
+    const dispatch = useDispatch();
+    const userRedux = useSelector(state => state.auth);
+    const { firstName, lastName } = useSelector(state => state.name);
 
-    const userRedux = useSelector(state => state.authReducer);
-    console.log(userRedux);
+
+    //requete fetch
+    const handleName = () => {
+
+        // Effectuer la requête Fetch
+        fetch('http://localhost:3001/api/v1/user/profile', {
+            method: 'POST', 
+            headers: {
+              'Content-Type': 'application/json', 
+              'Authorization': 'Bearer ' + (userRedux && userRedux.token), 
+            },
+        })
+        .then((response) => response.json())
+        .then(data => {
+        // Traitez les données renvoyées par l'API
+        console.log('Réponse de l\'API :', data);
+        dispatch(setName(firstName, lastName));
+        })
+        .catch(error => {
+        // Gérez les erreurs ici
+        console.error('Erreur lors de la requête Fetch :', error);
+        });    
+    };
+
+    userRedux && handleName();
+    
+    useEffect(() => {
+        if (user) {
+            authReducer(null, login(JSON.parse(user).userName, JSON.parse(user).token));
+            dispatch(login(JSON.parse(user).userName, JSON.parse(user).token));
+        } else {
+            document.location.href = '/sign-in';
+        }
+    }, []);
+    
 
     const [isModalOpen, setModalOpen] = useState(false);
     const [newUsername, setNewUsername] = useState(JSON.parse(user).userName);
@@ -42,42 +73,6 @@ function Account() {
         setNewUsername(JSON.parse(user).userName);
     };
 
-    //requete fetch
-    const handleName = () => {
-
-    // L'URL de l'API que vous souhaitez appeler
-    const apiUrl = 'http://localhost:3001/api/v1/user/profile';
-
-    // Options de la requête POST
-    const requestOptions = {
-      method: 'POST', // Méthode HTTP (POST pour une requête POST)
-      headers: {
-        'Content-Type': 'application/json', // Type de contenu de la requête (dans ce cas, JSON)
-        'Authorization': 'Bearer ' + (userRedux && userRedux.token), 
-      },
-    };
-
-    // Effectuer la requête Fetch
-    fetch(apiUrl, requestOptions)
-      .then(response => {
-        if (!response.ok) {
-          throw new Error('La requête a échoué avec le code : ' + response.status);
-        }
-        return response.json(); // Analyse la réponse JSON
-      })
-      .then(data => {
-        // Traitez les données renvoyées par l'API
-        console.log('Réponse de l\'API :', data);
-        // const user = { userName: username, token: data.body.token };
-      })
-      .catch(error => {
-        // Gérez les erreurs ici
-        console.error('Erreur lors de la requête Fetch :', error);
-      });    
-  };
-
-    userRedux && handleName();
-
     return (
         <>
             <Header />
@@ -85,7 +80,7 @@ function Account() {
                 <div className="header">
                     <h1>
                         Welcome back<br />
-                        {JSON.parse(user).userName}
+                        {firstName} {lastName} 
                     </h1>
                     <button className="edit-button" onClick={handleEditName}>
                         Edit Name

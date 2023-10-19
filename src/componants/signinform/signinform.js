@@ -10,42 +10,24 @@ function SignInForm() {
 
   const handleLogin = () => {
 
-        // Les données que vous souhaitez envoyer
-    const dataToSend = {
-      password: document.getElementById('password').value,
-      email: document.getElementById('username').value,
-      // ... autres données
-    };
-
-    // L'URL de l'API que vous souhaitez appeler
-    const apiUrl = 'http://localhost:3001/api/v1/user/login';
-
-    // Options de la requête POST
-    const requestOptions = {
-      method: 'POST', // Méthode HTTP (POST pour une requête POST)
+    // FETCH
+    fetch('http://localhost:3001/api/v1/user/login', {
+      method: 'POST',
       headers: {
-        'Content-Type': 'application/json', // Type de contenu de la requête (dans ce cas, JSON)
+        'Content-Type': 'application/json',
       },
-      body: JSON.stringify(dataToSend), // Convertit les données en JSON
-    };
-
-    // Effectuer la requête Fetch
-    fetch(apiUrl, requestOptions)
-      .then(response => {
-        if (!response.ok) {
-          throw new Error('La requête a échoué avec le code : ' + response.status);
-        }
-        return response.json(); // Analyse la réponse JSON
-      })
+      body: JSON.stringify({
+        password: document.getElementById('password').value,
+        email: document.getElementById('username').value,
+      }),
+    })
+      .then((response) => response.json())
       .then(data => {
-        // Traitez les données renvoyées par l'API
-        console.log('Réponse de l\'API :', data);
         const user = { userName: username, token: data.body.token };
         localStorage.setItem('user', JSON.stringify(user));
         document.location.href = '/account';
       })
       .catch(error => {
-        // Gérez les erreurs ici
         console.error('Erreur lors de la requête Fetch :', error);
       });    
   };

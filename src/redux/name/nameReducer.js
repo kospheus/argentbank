@@ -1,19 +1,22 @@
+import { SET_NAME } from './nameActions.js';
+
+// Reducer initial
 const initialState = {
-    userName: '', // L'état initial du nom d'utilisateur
-    // ...autres propriétés d'état
-  };
-  
-  const nameReducer = (state = initialState, action) => {
-    switch (action.type) {
-      case 'UPDATE_USERNAME':
-        return {
-          ...state,
-          userName: action.payload,
-        };
-      // ...d'autres cas pour d'autres actions
-      default:
-        return state;
-    }
-  };
-  
-  export default nameReducer;
+  firstName: '',
+  lastName: '',
+};
+
+const nameReducer = (state = initialState, action) => {
+  switch (action.type) {
+    case SET_NAME:
+      return {
+        ...state,
+        firstName: action.payload,
+        lastName: action.payload,
+      };
+    default:
+      return state;
+  }
+};
+
+export default nameReducer;
