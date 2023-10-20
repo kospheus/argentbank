@@ -5,7 +5,7 @@ import AccountSection from '../componants/accountSection/accountSection.js';
 import Footer from '../componants/footer/footer.js';
 import { login } from '../redux/auth/authActions.js';
 import authReducer from '../redux/auth/authReducer.js';
-import {setName} from '../redux/name/nameActions.js';
+import {getUserName} from '../redux/name/nameActions.js';
 import {EditNameModal} from '../componants/editNameModal/editNameModal'; // Importez le composant EditNameModal
 import {useSelector, useDispatch} from 'react-redux';
 
@@ -14,38 +14,38 @@ function Account() {
     const user = localStorage.getItem('user');
     const dispatch = useDispatch();
     const userRedux = useSelector(state => state.auth);
-    const { firstName, lastName } = useSelector(state => state.name);
-
+    const firstName = useSelector(state => state.name.firstname);
+    const lastName = useSelector(state => state.name.lastname);
+    const name = useSelector(state => state);
 
     //requete fetch
-    const handleName = () => {
+    const handleName = (user) => {
 
         // Effectuer la requête Fetch
         fetch('http://localhost:3001/api/v1/user/profile', {
             method: 'POST', 
             headers: {
               'Content-Type': 'application/json', 
-              'Authorization': 'Bearer ' + (userRedux && userRedux.token), 
+              'Authorization': 'Bearer ' + user, 
             },
         })
         .then((response) => response.json())
         .then(data => {
         // Traitez les données renvoyées par l'API
         console.log('Réponse de l\'API :', data);
-        dispatch(setName(firstName, lastName));
+        dispatch(getUserName(data.body.firstName, data.body.lastName));
         })
         .catch(error => {
         // Gérez les erreurs ici
         console.error('Erreur lors de la requête Fetch :', error);
         });    
     };
-
-    userRedux && handleName();
     
     useEffect(() => {
         if (user) {
             authReducer(null, login(JSON.parse(user).userName, JSON.parse(user).token));
             dispatch(login(JSON.parse(user).userName, JSON.parse(user).token));
+            handleName(JSON.parse(user).token);
         } else {
             document.location.href = '/sign-in';
         }
@@ -72,6 +72,8 @@ function Account() {
         // Réinitialisez le nouveau nom à sa valeur précédente
         setNewUsername(JSON.parse(user).userName);
     };
+
+    console.log(firstName);
 
     return (
         <>
