@@ -5,7 +5,7 @@ import nameReducer from './name/nameReducer'
 
 const rootReducer = combineReducers({
   auth: authReducer,
-  name: nameReducer, // Ajoutez d'autres réducteurs ici si nécessaire
+  name: nameReducer
 });
 
 const store = configureStore({reducer: rootReducer});

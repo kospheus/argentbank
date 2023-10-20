@@ -13,10 +13,8 @@ import {useSelector, useDispatch} from 'react-redux';
 function Account() {
     const user = localStorage.getItem('user');
     const dispatch = useDispatch();
-    const userRedux = useSelector(state => state.auth);
     const firstName = useSelector(state => state.name.firstname);
     const lastName = useSelector(state => state.name.lastname);
-    const name = useSelector(state => state);
 
     //requete fetch
     const handleName = (user) => {
@@ -72,8 +70,6 @@ function Account() {
         // Réinitialisez le nouveau nom à sa valeur précédente
         setNewUsername(JSON.parse(user).userName);
     };
-
-    console.log(firstName);
 
     return (
         <>

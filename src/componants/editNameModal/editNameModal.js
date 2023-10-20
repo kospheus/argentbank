@@ -1,33 +1,53 @@
-import React, { useState } from 'react';
-import store from '../../redux/store';
+import React from 'react';
+import {useDispatch} from 'react-redux';
+import {getUserName} from '../../redux/name/nameActions.js';
 
-export const EditNameModal = ({ userName, onSave, onCancel }) => {
-  const [newName, setNewName] = useState(userName);
 
-  const handleSaveName = () => {
-    // Appelez la fonction onSave avec le nouveau nom
-    onSave(newName);
+export const EditNameModal = ({ onCancel }) => {
+
+  const dispatch = useDispatch();
+
+  const handleCloseEdit = () => {
+    onCancel();
   };
 
-  const handleCancelEdit = () => {
-    // Appelez la fonction onCancel pour annuler la modification
-    onCancel();
+  const handleSaveName = () => {
+    const newFirstName = document.querySelector('#firstName').value
+    const newLastName = document.querySelector('#lastName').value
+    if (newFirstName && newLastName) {
+      dispatch(getUserName(newFirstName, newLastName));
+      handleCloseEdit();
+    } 
+  };
+
+  const inputStyle = {
+    marginBottom: '4px'
   };
 
   return (
     <div className="modal">
       <div className="modal-content">
-        <p className="modal-text">Saisissez votre nouveau nom</p>
-        <input
-          type="text"
-          value={newName}
-          onChange={(e) => setNewName(e.target.value)}
-        />
+        <p className="modal-text">New Name</p>
+        <section>
+          <p className="input-text">First Name</p>
+          <input
+            id='firstName'
+            type="text"
+            style={inputStyle}
+          />
+        </section>
+        <section>
+          <p className="input-text">Last Name</p>
+          <input
+            id='lastName'
+            type="text"
+          />
+        </section>
         <div className="modal-buttons">
-          <button className="modal-button1" onClick={handleSaveName}>
+          <button className='modal-button1'onClick={handleSaveName}>
             Save
           </button>
-          <button className="modal-button2" onClick={handleCancelEdit}>
+          <button className="modal-button2" onClick={handleCloseEdit}>
             Cancel
           </button>
         </div>
