@@ -12,10 +12,30 @@ export const EditNameModal = ({ onCancel }) => {
   };
 
   const handleSaveName = () => {
+    const user = JSON.parse(localStorage.getItem('user')).token;
+    console.log(user);
     const newFirstName = document.querySelector('#firstName').value
     const newLastName = document.querySelector('#lastName').value
     if (newFirstName && newLastName) {
-      dispatch(getUserName(newFirstName, newLastName));
+
+      fetch('http://localhost:3001/api/v1/user/profile', {
+            method: 'PUT', 
+            headers: {
+              'Content-Type': 'application/json', 
+              'Authorization': 'Bearer ' + user, 
+            },
+            body: JSON.stringify({
+              firstName: newFirstName,
+              lastName: newLastName,
+            }),
+        })
+        .then((response) => response.json())
+        .then(data => {
+          dispatch(getUserName(newFirstName, newLastName));
+        })
+        .catch(error => {
+        console.error('Erreur lors de la requête Fetch :', error);
+        });    
       handleCloseEdit();
     } 
   };

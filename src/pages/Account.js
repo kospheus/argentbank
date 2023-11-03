@@ -8,33 +8,37 @@ import authReducer from '../redux/auth/authReducer.js';
 import {getUserName} from '../redux/name/nameActions.js';
 import {EditNameModal} from '../componants/editNameModal/editNameModal'; // Importez le composant EditNameModal
 import {useSelector, useDispatch} from 'react-redux';
+import { useNavigate } from 'react-router-dom'; 
 
 
 function Account() {
+
+    const navigate = useNavigate(); // Obtenez la fonction de navigation
+
     const user = localStorage.getItem('user');
     const dispatch = useDispatch();
     const firstName = useSelector(state => state.name.firstname);
     const lastName = useSelector(state => state.name.lastname);
-
+    
     //requete fetch
     const handleName = (user) => {
 
-        // Effectuer la requête Fetch
+        // Requête Fetch
         fetch('http://localhost:3001/api/v1/user/profile', {
             method: 'POST', 
             headers: {
               'Content-Type': 'application/json', 
+              // Utilisation du token dans l'authorization
               'Authorization': 'Bearer ' + user, 
             },
         })
         .then((response) => response.json())
         .then(data => {
-        // Traitez les données renvoyées par l'API
         console.log('Réponse de l\'API :', data);
+        // Envoi du prénom et du nom dans Redux
         dispatch(getUserName(data.body.firstName, data.body.lastName));
         })
         .catch(error => {
-        // Gérez les erreurs ici
         console.error('Erreur lors de la requête Fetch :', error);
         });    
     };
@@ -45,30 +49,24 @@ function Account() {
             dispatch(login(JSON.parse(user).userName, JSON.parse(user).token));
             handleName(JSON.parse(user).token);
         } else {
+            navigate('/sign-in');
             document.location.href = '/sign-in';
         }
     }, []);
     
 
     const [isModalOpen, setModalOpen] = useState(false);
-    const [newUsername, setNewUsername] = useState(JSON.parse(user).userName);
 
     const handleEditName = () => {
         setModalOpen(true);
     };
 
     const handleSaveName = () => {
-        // Mettez à jour le nom de l'utilisateur ici (vous pouvez envoyer une requête au serveur si nécessaire)
-        // Une fois que le nom est mis à jour, vous pouvez le stocker localement et fermer la modale
         setModalOpen(false);
-        // Vous pouvez également envoyer une requête au serveur pour mettre à jour le nom ici
     };
 
     const handleCancelEdit = () => {
-        // Annulez les modifications et fermez la modale
         setModalOpen(false);
-        // Réinitialisez le nouveau nom à sa valeur précédente
-        setNewUsername(JSON.parse(user).userName);
     };
 
     return (
@@ -86,7 +84,6 @@ function Account() {
                     <div className='modal-container'>
                     {isModalOpen && (
                         <EditNameModal 
-                            updateUserName={(newName) => setNewUsername(newName)}
                             onSave={handleSaveName}
                             onCancel={handleCancelEdit}
                         />

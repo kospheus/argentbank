@@ -3,13 +3,19 @@ import './header.css';
 import Logo from '../../assets/argentBankLogo.png';
 import { connect } from 'react-redux';
 import { logout } from '../../redux/out/outActions';
-import { useNavigate } from 'react-router-dom'; // Importez useNavigate depuis react-router-dom
+import { useNavigate } from 'react-router-dom'; 
+import {useSelector} from 'react-redux';
+
 
 function Header({ isAuthenticated, logout }) {
+
+  const firstName = useSelector(state => state.name.firstname);
+
   const navigate = useNavigate(); // Obtenez la fonction de navigation
 
   const handleLogout = () => {
     logout();
+    localStorage.clear();
     navigate('/'); // Rediriger vers la page d'accueil après la déconnexion
   };
 
@@ -24,6 +30,10 @@ function Header({ isAuthenticated, logout }) {
         <h1 className="sr-only">Argent Bank</h1>
       </a>
       <div>
+        <a href='/account' className='account-link'>
+          <i className="fa fa-user-circle account-icon"></i>
+          <span className='userFirstName'>{firstName}</span>
+        </a>
         {isAuthenticated ? (
           <a className="main-nav-item" href="#" onClick={handleLogout}>
             <i className="fa fa-sign-out"></i>

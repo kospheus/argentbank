@@ -56,3 +56,12 @@
     color: #fff;
     margin-bottom: 2rem;
   }
+
+  .account-icon {
+    height: 24px;
+    width: 24px;
+  }
+
+  .account-link {
+    margin-right: 12px;
+  }
